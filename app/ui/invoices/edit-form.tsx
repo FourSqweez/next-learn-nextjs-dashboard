@@ -1,7 +1,8 @@
 'use client';
 
-import { State, updateInvoice } from '@/app/lib/actions';
+import { updateInvoice } from '@/app/lib/actions';
 import { CustomerField, InvoiceForm } from '@/app/lib/definitions';
+import { State } from '@/app/lib/validations';
 import { Button } from '@/app/ui/button';
 import {
   CheckIcon,
@@ -19,7 +20,7 @@ export default function EditInvoiceForm({
   invoice: InvoiceForm;
   customers: CustomerField[];
 }) {
-  const initialState: State = { message: null, errors: {} };
+  const initialState: State = { message: '', errors: {} };
   const updateInvoiceWithId = updateInvoice.bind(null, invoice.id);
   const [state, formAction] = useActionState(updateInvoiceWithId, initialState);
 
@@ -140,6 +141,11 @@ export default function EditInvoiceForm({
               ))}
           </div>
         </fieldset>
+        {state.message !== '' && (
+          <div id="form-error" aria-live="polite" aria-atomic="true">
+            <p className="mt-2 text-sm text-red-500">{state.message}</p>
+          </div>
+        )}
       </div>
       <div className="mt-6 flex justify-end gap-4">
         <Link

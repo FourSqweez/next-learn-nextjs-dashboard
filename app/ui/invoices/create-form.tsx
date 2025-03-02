@@ -1,6 +1,7 @@
 'use client';
-import { createInvoice, State } from '@/app/lib/actions';
+import { createInvoice } from '@/app/lib/actions';
 import { CustomerField } from '@/app/lib/definitions';
+import { State } from '@/app/lib/validations';
 import { Button } from '@/app/ui/button';
 import {
   CheckIcon,
@@ -12,10 +13,9 @@ import Link from 'next/link';
 import { useActionState } from 'react';
 
 export default function Form({ customers }: { customers: CustomerField[] }) {
-  const initialState: State = { message: null, errors: {} };
+  const initialState: State = { message: '', errors: {} };
   const [state, formAction] = useActionState(createInvoice, initialState);
 
-  console.log('State :', state);
   return (
     <form action={formAction}>
       <div
@@ -134,11 +134,11 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
           </div>
         </fieldset>
 
-        <div id="form-error" aria-live="polite" aria-atomic="true">
-          {state.message && (
+        {state.message !== '' && (
+          <div id="form-error" aria-live="polite" aria-atomic="true">
             <p className="mt-2 text-sm text-red-500">{state.message}</p>
-          )}
-        </div>
+          </div>
+        )}
       </div>
       <div className="mt-6 flex justify-end gap-4">
         <Link
